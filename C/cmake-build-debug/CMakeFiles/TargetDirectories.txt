@@ -1,0 +1,3 @@
+/home/karoline/Documents/IFPI/Estrutura-de-dados/C/cmake-build-debug/CMakeFiles/C.dir
+/home/karoline/Documents/IFPI/Estrutura-de-dados/C/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/karoline/Documents/IFPI/Estrutura-de-dados/C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
