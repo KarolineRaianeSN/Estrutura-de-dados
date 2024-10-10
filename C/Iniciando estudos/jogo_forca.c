@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "forca.h"
+#include <time.h>
 
 char palavrasecreta[20];
 char chutes[26];
@@ -82,36 +83,99 @@ void desenhaforca()
 
 void escolhepalavra()
 {
-    sprintf(palavrasecreta, "MELANCIA");
+    FILE *f = fopen("palavras.txt", "r");
+
+    if (f == 0)
+    {
+        printf("Banco de dados de palavras não disponível\n\n");
+        exit(1);
+
+        int qtd_palavras;
+
+        fscanf(f, "%d", &qtd_palavras);
+
+        srand(time(0));
+        int randomico = rand() % qtd_palavras;
+
+        for (int i = 0; i <= randomico; i++)
+        {
+            fscanf(f, "%s", palavrasecreta);
+        }
+    }
+
+    fclose(f);
+}
+/**
+ * Pergunta ao usuário se ele deseja adicionar uma nova palavra ao banco de dados. Caso sim, abre arquivo para escrita e adiciona a nova palavra
+ */
+void adiciona_palavra()
+{
+    char nova_palavra[20];
+    char quer;
+
+    printf("Quer adicionar uma nova palavra? (s/n) ");
+    scanf(" %c", &quer);
+
+    if (quer == "s")
+    {
+
+        printf("Digite uma nova palavra(em letras maíuscula): ");
+
+        scanf(" %s", nova_palavra); // Recebe a nova palavra
+    }
+
+    FILE *f = fopen("palavras.txt", "r+"); // Abre o arquivo para adicionar(append) uma nova palavra
+
+    if (f == 0)
+    {
+        printf("Banco de dados de palavras não disponível\n\n");
+        exit(1);
+    }
+
+    int qtd_palavras;
+
+    fscanf(f, "%d", &qtd_palavras);
+    qtd_palavras++;
+
+    fseek(f, 0, SEEK_END);            // Move o ponteiro para o final do arquivo
+    fprintf(f, "%s\n", nova_palavra); // Escreve a nova palavra no arquivo e adiciona uma quebra de linha
+
+    fclose(f);
 }
 
-int enforcou() 
+int enforcou()
 {
     int erros = 0;
 
     // Todos os chutes
-    for(int i = 0; i < chutes_dados; i++) {
+    for (int i = 0; i < chutes_dados; i++)
+    {
 
         int existe = 0;
 
         // Verifica letra por letra da palavra a existência do chute
-        for(int j = 0; j < strlen(palavrasecreta); j++) {
-            if(chutes[i] == palavrasecreta[j]) {
+        for (int j = 0; j <= strlen(palavrasecreta); j++)
+        {
+            if (chutes[i] == palavrasecreta[j])
+            {
 
                 existe = 1;
                 break;
+            }
         }
+        if (!existe)
+            erros++;
     }
-    if (!existe) erros++;
-}
 
     return erros >= 5;
 }
 
 int ganhou()
 {
-    for (int i = 0; i < strlen(palavrasecreta); i++) {
-        if (!jachutou(palavrasecreta[i])) {
+    for (int i = 0; i <= strlen(palavrasecreta); i++)
+    {
+        if (!jachutou(palavrasecreta[i]))
+        {
             return 0;
         }
     }
